@@ -5,12 +5,15 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    public GameObject pickupPrefab;
     private float spawnRange = 9.0f;
-    private float startDelay = 1.5f;
+    private float enemyDelay = 1.5f;
+    private float pickupDelay = 10.0f;
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("SpawnEnemy", startDelay);
+        Invoke("SpawnEnemy", enemyDelay);
+        Invoke("SpawnPickup", pickupDelay);
     }
 
     // Update is called once per frame
@@ -19,7 +22,7 @@ public class SpawnManager : MonoBehaviour
         
     }
 
-    Vector3 GenerateSpawnPoint() {
+    Vector3 GenEnemySpawnPoint() {
         float spawnPosX = Random.Range(-spawnRange, spawnRange);
         float spawnPosZ = Random.Range(-spawnRange, spawnRange);
         Vector3 spawnPoint = new Vector3(spawnPosX, 20, spawnPosZ);
@@ -27,9 +30,23 @@ public class SpawnManager : MonoBehaviour
     }
 
     void SpawnEnemy() {
-        Instantiate(enemyPrefab, GenerateSpawnPoint(), enemyPrefab.transform.rotation);
+        Instantiate(enemyPrefab, GenEnemySpawnPoint(), enemyPrefab.transform.rotation);
 
         float spawnDelay = Random.Range(2, 8);
         Invoke("SpawnEnemy", spawnDelay);
+    }
+
+    Vector3 GenPickupSpawnPoint() {
+        float spawnPosX = Random.Range(-spawnRange, spawnRange);
+        float spawnPosZ = Random.Range(-spawnRange, spawnRange);
+        Vector3 spawnPoint = new Vector3(spawnPosX, 0.4f, spawnPosZ);
+        return spawnPoint;
+    }
+
+    void SpawnPickup() {
+        Instantiate(pickupPrefab, GenPickupSpawnPoint(), pickupPrefab.transform.rotation);
+        
+        float spawnDelay = Random.Range(16, 24);
+        Invoke("SpawnPickup", spawnDelay);
     }
 }
