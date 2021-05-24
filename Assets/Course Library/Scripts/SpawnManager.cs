@@ -9,11 +9,15 @@ public class SpawnManager : MonoBehaviour
     private float spawnRange = 9.0f;
     private float enemyDelay = 1.5f;
     private float pickupDelay = 10.0f;
+    private float spawnIncreaseDelay = 20.0f;
+    private float enemyDelayMin = 4.0f;
+    private float enemyDelayMax = 8.0f;
     // Start is called before the first frame update
     void Start()
     {
         Invoke("SpawnEnemy", enemyDelay);
         Invoke("SpawnPickup", pickupDelay);
+        StartCoroutine(EnemySpawnIncrease());
     }
 
     // Update is called once per frame
@@ -29,10 +33,23 @@ public class SpawnManager : MonoBehaviour
         return spawnPoint;
     }
 
+    IEnumerator EnemySpawnIncrease() {
+        yield return new WaitForSeconds(spawnIncreaseDelay);
+        if(enemyDelayMin > 0) {
+            enemyDelayMin -= 0.5f;
+        }
+        enemyDelayMax -= 0.5f;
+
+        //continue starting coroutine until spawn rate is at max
+        if (enemyDelayMax > 0.5) {
+            StartCoroutine(EnemySpawnIncrease());
+        }
+    }
+
     void SpawnEnemy() {
         Instantiate(enemyPrefab, GenEnemySpawnPoint(), enemyPrefab.transform.rotation);
 
-        float spawnDelay = Random.Range(2, 8);
+        float spawnDelay = Random.Range(enemyDelayMin, enemyDelayMax);
         Invoke("SpawnEnemy", spawnDelay);
     }
 
@@ -45,7 +62,7 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnPickup() {
         Instantiate(pickupPrefab, GenPickupSpawnPoint(), pickupPrefab.transform.rotation);
-        
+
         float spawnDelay = Random.Range(16, 24);
         Invoke("SpawnPickup", spawnDelay);
     }
