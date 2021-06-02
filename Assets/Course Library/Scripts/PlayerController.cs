@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float knockbackStrength;
     public float powerupDuration;
     public float powerupMultiplier;
+    public float boostInput;
 
     // Start is called before the first frame update
     void Start()
