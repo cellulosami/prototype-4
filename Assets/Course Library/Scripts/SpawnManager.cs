@@ -63,7 +63,7 @@ public class SpawnManager : MonoBehaviour
     void SpawnPickup() {
         Instantiate(pickupPrefab, GenPickupSpawnPoint(), pickupPrefab.transform.rotation);
 
-        float spawnDelay = Random.Range(16, 24);
+        float spawnDelay = Random.Range(22, 30);
         Invoke("SpawnPickup", spawnDelay);
     }
 }
